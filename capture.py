@@ -41,7 +41,7 @@ def database(text):
     suspected = Suspected.objects.filter(regs_no=text).exists()
     if suspected:
         print(f"🚨 ALERT: Suspected vehicle detected: {text}\n")
-        
+        Suspected.objects.filter(found_location__isnull=True).update(found_location="Galgotias College Parking")
 
     # Step 2: Check if vehicle is already inside
     existing_record = VehicleRecord.objects.filter(regs_no=text, in_parking=True).first()
@@ -55,7 +55,6 @@ def database(text):
 
         existing_record.out_date_time = timezone.now()
         existing_record.in_parking = False
-        existing_record.slot_position = None
         existing_record.save()
         print(f"🚗 Exit recorded for: {text} at {existing_record.out_date_time.strftime('%Y-%m-%d %H:%M:%S')} from slot '{pos}'")
 
