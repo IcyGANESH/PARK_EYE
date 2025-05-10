@@ -45,4 +45,4 @@ class Police(models.Model):
         return check_password(raw_password, self.password)
 
     def __str__(self):
-        return f"{self.username} ({self.location})"        
+        return f"{self.username} ({self.locations})"        

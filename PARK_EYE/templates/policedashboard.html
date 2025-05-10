@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Police Dashboard - PartIt</title>
+    <link rel="icon" href="./assets/parking.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body
+    class="bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen font-sans text-gray-800"
+  >
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <h1 class="text-5xl font-extrabold text-blue-800 mb-2">
+          🚔 Police Dashboard
+        </h1>
+        <p class="text-lg text-gray-600">
+          Crime Report Logs –
+          <span class="font-semibold text-blue-600">PartIt System</span>
+        </p>
+      </div>
+
+      <!-- Table Card -->
+      <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 text-sm">
+            <thead
+              class="bg-blue-700 text-white text-left text-sm uppercase tracking-wider sticky top-0 z-10"
+            >
+              <tr>
+                <th class="py-4 px-6">Registration No.</th>
+                <th class="py-4 px-6">Crime Committed</th>
+                <th class="py-4 px-6">Location of Crime</th>
+                <th class="py-4 px-6">Location Caught</th>
+                <th class="py-4 px-6">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 bg-white">
+              {% for suspect in suspected_vehicles %}
+              <tr class="hover:bg-gray-50">
+                <td class="py-4 px-6 font-semibold">{{ suspect.regs_no }}</td>
+                <td class="py-4 px-6">{{ suspect.crime_attempted }}</td>
+                <td class="py-4 px-6">{{ suspect.spotted_location }}</td>
+                <td class="py-4 px-6"> 
+                {% if suspect.found_location %}
+                  {{ suspect.found_location }}
+                {% else %}
+                  <span class="text-gray-500 italic">Not Yet Caught</span>
+                {% endif %}
+                </td>
+                <td class="py-4 px-6">
+                  <button
+                    onclick="markAsFound(this)"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full shadow flex items-center gap-2 transition duration-200"
+                  >
+                    <i class="fas fa-check-circle"></i> Found
+                  </button>
+                </td>
+              </tr> 
+              {% empty %}
+              <tr>
+                <td colspan="5" class="py-4 px-6 text-center text-gray-500 italic">No suspected vehicles found in your locations.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script>
+      function markAsFound(button) {
+        // Only proceed if the button currently shows "Not Found"
+        const isNotFound = button.textContent.trim().includes("Not Found");
+
+        if (!isNotFound) return; // Exit if it's already "Found"
+
+        const row = button.closest("tr");
+        const locationCell = row.querySelector(".location-caught");
+        const location = prompt(
+          "Enter the location where the criminal was caught:"
+        );
+
+        if (location) {
+          // Update location
+          locationCell.textContent = location;
+          locationCell.classList.remove("text-gray-500", "italic");
+
+          // Update button to "Found"
+          button.innerHTML = '<i class="fas fa-check-circle"></i> Found';
+          button.classList.remove("bg-red-600", "hover:bg-red-700");
+          button.classList.add("bg-blue-600", "hover:bg-blue-700");
+        }
+      }
+    </script>
+  </body>
+</html>
