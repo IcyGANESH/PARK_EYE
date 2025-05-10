@@ -18,7 +18,7 @@
     <div id="display-data" class="flex-1 p-8 overflow-auto bg-white rounded-2xl shadow-lg">
       <div class="mb-6 flex justify-between items-center">
         <div>
-          <h1 class="text-2xl font-semibold text-gray-800">Display User Data</h1>
+          <h1 class="text-2xl font-semibold text-gray-800">PARK_EYE Record Tracker</h1>
           <p class="text-sm text-gray-500">View all the car's data using our application</p>
         </div>
         
@@ -42,23 +42,25 @@
         <table class="min-w-full text-sm border-collapse">
           <thead class="bg-gray-100 text-gray-700">
             <tr>
-              <th class="px-4 py-3 text-left font-medium">Car Number Plate</th>
-              <th class="px-4 py-3 text-left font-medium">InTime</th>
-              <th class="px-4 py-3 text-left font-medium">OutTime</th>
+              <th class="px-4 py-3 text-left font-medium">Vehicle Number</th>
+              <th class="px-4 py-3 text-left font-medium">ENTRY</th>
+              <th class="px-4 py-3 text-left font-medium">EXIT</th>
             </tr>
           </thead>
           <tbody class="text-gray-600">
+          {% for record in records %}
             <tr class="hover:bg-gray-50 transition-colors">
-              <td class="px-4 py-3 border-b">HR-A-01-2034</td>
-              <td class="px-4 py-3 border-b">24 Jun 2024, 9:23 PM</td>
-              <td class="px-4 py-3 border-b">24 Jun 2024, 9:23 PM</td>
+              <td class="px-4 py-3 border-b">{{ record.regs_no }}</td>
+              <td class="px-4 py-3 border-b">{{ record.in_date_time }}</td>
+              <td class="px-4 py-3 border-b">
+              {% if record.out_date_time %}
+                {{ record.out_date_time }}
+              {% else %}
+                <span class="text-gray-500 italic">Still Inside</span>
+              {% endif %}
+              </td>
             </tr>
-            <tr class="hover:bg-gray-50 transition-colors">
-              <td class="px-4 py-3 border-b">HR-A-01-2034</td>
-              <td class="px-4 py-3 border-b">24 Jun 2024, 9:23 PM</td>
-              <td class="px-4 py-3 border-b">24 Jun 2024, 9:23 PM</td>
-            </tr>
-            <!-- Add more rows as needed -->
+            {% endfor %}
           </tbody>
         </table>
       </div>

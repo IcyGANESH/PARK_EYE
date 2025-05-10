@@ -1,5 +1,0 @@
-
-
-
-
-text=input("Enter no: ")

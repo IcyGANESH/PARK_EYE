@@ -1,4 +1,106 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="./assets/parking.png" />
+  <title>Login - Police Dashboard | ParkEye</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Add FontAwesome for eye icon -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-blue-200 to-white min-h-screen flex items-center justify-center px-4">
+
+  <div class="w-full max-w-sm md:max-w-md bg-white/70 backdrop-blur-lg border border-blue-200 shadow-2xl rounded-3xl p-8">
+    
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <img src="./assets/parking.png" alt="ParkEye Logo" class="w-16 h-16 mx-auto mb-3" />
+      <h1 class="text-4xl font-extrabold text-blue-800">ParkEye</h1>
+      <p class="text-sm text-gray-600 mt-1">Police Dashboard Login</p>
+    </div>
+
+    <!-- Login Form -->
+    <form action="{% url 'police_login_check' %}" method="POST" class="space-y-5">
+      {% csrf_token %}
+      <!-- Username -->
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          required
+          placeholder="Enter your username"
+          class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+        />
+      </div>
+
+      <!-- Password -->
+      <div class="relative">
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          placeholder="••••••••"
+          class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+        />
+        <!-- Eye Icon to Toggle Password Visibility -->
+        <span id="eye-icon" class="absolute top-2/3 right-4 transform -translate-y-1/2 cursor-pointer text-gray-600">
+          <i class="fas fa-eye"></i>
+        </span>
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg shadow-md hover:bg-blue-700 active:scale-[0.98] transition-all duration-150"
+      >
+         Login
+      </button>
+    </form>
+  </div>
+
+  <script>
+    // Password visibility toggle functionality
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = document.getElementById('eye-icon');
+
+    eyeIcon.addEventListener('click', () => {
+      // Toggle password type between 'text' and 'password'
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.innerHTML = '<i class="fas fa-eye-slash"></i>'; // Change to eye-slash
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.innerHTML = '<i class="fas fa-eye"></i>'; // Change back to eye
+      }
+    });
+  </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
 <html>
 <head>
     <title>Police Login</title>
@@ -7,11 +109,11 @@
     <h2>Police Control Room Login</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.username }}
         <button type="submit">Login</button>
     </form>
     {% for message in messages %}
         <p style="color:red;">{{ message }}</p>
     {% endfor %}
 </body>
-</html>
+</html> {% endcomment %}

@@ -5,9 +5,9 @@ from django.contrib import messages
 from django.utils.timezone import now
 # Create your views here.
 
-def dashboard(request):
+def register(request):
     records = VehicleRecord.objects.all().order_by('-in_date_time')  # latest first
-    return render(request, 'dashboard.html', {'records': records})
+    return render(request, 'register.html', {'records': records})
 
 
 def complain(request):
@@ -38,27 +38,20 @@ def policelogin(request):
 
 def police_login_check(request):
     if request.method == 'POST':
-        form = PoliceLoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-            try:
-                police = Police.objects.get(username=username)
-                if police.check_password(password):
-                    request.session['police_id'] = police.id  # saving session for logged-in user
-                    return redirect('get_suspected')
-                else:
-                    messages.error(request, 'Invalid password.')
-            except Police.DoesNotExist:
-                messages.error(request, 'Username not found.')
-    else:
-        form = PoliceLoginForm()
+        try:
+            police = Police.objects.get(username=username, password=password)
+            request.session['police_id'] = police.id
+            return redirect('police_dashboard')  # Redirect to dashboard if login success
+        except Police.DoesNotExist:
+            messages.error(request, 'Invalid username or password.')
 
-    return render(request, 'police_login.html', {'form': form})
+    return render(request, 'police_login.html')
 
 
-def get_suspected(request):
+def policedashboard(request):
     police_id = request.session.get('police_id')
     if not police_id:
         return redirect('police_login')
@@ -68,7 +61,7 @@ def get_suspected(request):
 
     suspected_vehicles = Suspected.objects.filter(found_location__in=police_locations)
 
-    return render(request, 'get_suspected.html', {
+    return render(request, 'policedashboard.html', {
         'police': police,
         'suspected_vehicles': suspected_vehicles
     })
