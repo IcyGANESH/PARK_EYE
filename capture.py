@@ -6,6 +6,7 @@ import pandas as pd
 import time
 import os
 import django
+import re
 
 # --- Setup Django Environment ---
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "PARKEYE.settings")  # replace with your project name
@@ -17,36 +18,88 @@ from django.utils import timezone
 # Path to tesseract executable
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-# Function defining :-
+import cv2
+from django.utils import timezone
+from PARK_EYE.models import VehicleRecord, Suspected
+
+# Load active vehicles into memory and initialize slot grid
+slots = [['' for _ in range(3)] for _ in range(2)]
+active_vehicles = VehicleRecord.objects.filter(in_parking=True)
+
+for vehicle in active_vehicles:
+    if vehicle.slot_position:
+        i, j = int(vehicle.slot_position[0]), int(vehicle.slot_position[1])
+        slots[i][j] = vehicle.regs_no
+
 def database(text):
-    if text:
-        suspected = Suspected.objects.filter(regs_no=text).exists()
-        if suspected:
-            print(f"🚨 ALERT: Suspected vehicle detected: {text}")
-        else:
-            print("NOT Found")    
+    global slots
 
+    if not text:
+        return
 
-        existing_record = VehicleRecord.objects.filter(regs_no=text, in_parking=True).first()
-        if existing_record:
-        # Vehicle is already in parking — mark exit
-            existing_record.out_date_time = timezone.now()
-            existing_record.in_parking = False
-            
-            existing_record.save()
-            print(f"🚗 Exit recorded for: {text} at {existing_record.out_date_time.strftime('%Y-%m-%d %H:%M:%S')}")
-        else:
-        # New vehicle entry
-            VehicleRecord.objects.create(
-                regs_no=text,
-                in_parking=True,
-                in_date_time=timezone.now()
-            )
-            print(f"✅ Entry recorded for: {text} at {timezone.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    
+    # Step 1: Check suspected list
+    suspected = Suspected.objects.filter(regs_no=text).exists()
+    if suspected:
+        print(f"🚨 ALERT: Suspected vehicle detected: {text}\n")
+        
+
+    # Step 2: Check if vehicle is already inside
+    existing_record = VehicleRecord.objects.filter(regs_no=text, in_parking=True).first()
+
+    if existing_record:
+        # Mark exit
+        pos = existing_record.slot_position
+        if pos:
+            i, j = int(pos[0]), int(pos[1])
+            slots[i][j] = ''
+
+        existing_record.out_date_time = timezone.now()
+        existing_record.in_parking = False
+        existing_record.slot_position = None
+        existing_record.save()
+        print(f"🚗 Exit recorded for: {text} at {existing_record.out_date_time.strftime('%Y-%m-%d %H:%M:%S')} from slot '{pos}'")
+
+    else:
+        # Step 3: Check if parking is full
+        total_filled = sum(1 for row in slots for val in row if val)
+        if total_filled >= 6:
+            print("❌ Parking Full — Cannot allow new vehicle.")
+            msg_img = np.zeros((100, 400), dtype=np.uint8)
+            cv2.putText(msg_img, "Parking Full! Entry Denied.", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.8, 255, 2)
+            cv2.imshow("❌ ALERT", msg_img)
+            cv2.waitKey(0)
+            cv2.destroyWindow("❌ ALERT")
+            return
+
+        # Step 4: Assign to first empty slot
+        found = False
+        for i in range(2):
+            for j in range(3):
+                if slots[i][j] == '':
+                    slots[i][j] = text
+                    slot_pos = f"{i}{j}"
+                    found = True
+                    break
+            if found:
+                break
+
+        # Step 5: Save to DB
+        VehicleRecord.objects.create(
+            regs_no=text,
+            in_parking=True,
+            in_date_time=timezone.now(),
+            slot_position=slot_pos
+        )
+        print(f"✅ Entry recorded for: {text} at {timezone.now().strftime('%Y-%m-%d %H:%M:%S')} at slot '{slot_pos}'")
+
+    # Step 6: Show slot status
+    print("\nCurrent Parking Slots:")
+    for i in range(2):
+        for j in range(3):
+            print(f"Slot {i}{j}: {slots[i][j] if slots[i][j] else 'Empty'}")
 
 # variable which takes cars image input name
-car_nam = input("Enter the name of the image file (with extension): ")
+car_nam = input("\nEnter the name of the image file (with extension): ")
 # Load and resize the image
 img = cv2.imread('images\\' + car_nam)
 img = imutils.resize(img, width=500)
@@ -95,11 +148,10 @@ if NumberPlateCnt is not None:
     # Run OCR
     config = '-l eng --oem 1 --psm 7'
     text = pytesseract.image_to_string(plate_img, config=config).strip()
-
-#     
+    text = re.sub(r'[^A-Za-z0-9]', '', text)  # Remove unwanted characters
+    text = text.replace(" ", "")  # Remove spaces  
 
     print("\nDetected Number Plate:", text)
-    
     # for admin django update 
     database(text)
 

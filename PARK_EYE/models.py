@@ -20,6 +20,8 @@ class VehicleRecord(models.Model):
     in_date_time = models.DateTimeField(null=True, blank=True)         # Entry date & time (captured automatically when created)
     out_date_time = models.DateTimeField(null=True, blank=True)    # Exit date & time (can be empty initially)
     in_parking = models.BooleanField(default=True)                 # Checkbox to indicate if vehicle is currently inside
+    slot_position = models.CharField(max_length=5, blank=True, null=True)  # Slot position (e.g., "A1", "B1", etc.)
+
 
     def __str__(self):
         return f"{self.regs_no} - {'Inside' if self.in_parking else 'Exited'}"
