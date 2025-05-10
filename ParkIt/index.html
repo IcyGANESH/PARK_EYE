@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parking Management</title>
+  <link rel="icon" href="./assets/parking.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-blue-50 via-purple-100 to-pink-100 text-gray-800 font-sans">
+
+  <div class="flex h-screen">
+
+    <!-- Sidebar (optional for later use) -->
+    
+
+    <!-- Main Content -->
+    <div id="display-data" class="flex-1 p-8 overflow-auto bg-white rounded-2xl shadow-lg">
+      <div class="mb-6 flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-semibold text-gray-800">Display User Data</h1>
+          <p class="text-sm text-gray-500">View all the car's data using our application</p>
+        </div>
+        
+        <div class="flex gap-4 items-center">
+          <div class="flex gap-2">
+            <input type="text" placeholder="Search by number plate" class="border px-4 py-2 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+            <input type="text" placeholder="Search by date" class="border px-4 py-2 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+          </div>
+          
+          <button class="bg-red-600 text-white px-6 py-2 rounded-lg text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">
+            <span class="material-icons">all_inclusive</span> All
+          </button>
+          <button class="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+            <span class="material-icons">cloud_download</span> Export Data
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto rounded-lg shadow-lg">
+        <table class="min-w-full text-sm border-collapse">
+          <thead class="bg-gray-100 text-gray-700">
+            <tr>
+              <th class="px-4 py-3 text-left font-medium">Car Number Plate</th>
+              <th class="px-4 py-3 text-left font-medium">InTime</th>
+              <th class="px-4 py-3 text-left font-medium">OutTime</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-600">
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-3 border-b">HR-A-01-2034</td>
+              <td class="px-4 py-3 border-b">24 Jun 2024, 9:23 PM</td>
+              <td class="px-4 py-3 border-b">24 Jun 2024, 9:23 PM</td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-3 border-b">HR-A-01-2034</td>
+              <td class="px-4 py-3 border-b">24 Jun 2024, 9:23 PM</td>
+              <td class="px-4 py-3 border-b">24 Jun 2024, 9:23 PM</td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://fonts.googleapis.com/icon?family=Material+Icons"></script>
+</body>
+</html>

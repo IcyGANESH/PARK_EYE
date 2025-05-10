@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aadhaar Login Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-tr from-blue-100 to-indigo-200">
+  <div class="w-full max-w-sm p-8 space-y-6 bg-white rounded-2xl shadow-2xl">
+    <h2 class="text-3xl font-bold text-center text-gray-800">Welcome Back</h2>
+    <p class="text-sm text-center text-gray-500">Login with Aadhaar</p>
+
+    <form class="space-y-5" action="/login" method="POST">
+      <div>
+        <label for="aadhaar" class="block mb-1 text-sm font-medium text-gray-700">Aadhaar Number</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M12 4v1m0 4v1m0 4v1m0 4v1m0 4v1m0 4v1m-4-4h1m4 0h1m-4-4h1m4 0h1m-4-4h1m4 0h1m-4-4h1m4 0h1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <input
+            type="text"
+            id="aadhaar"
+            name="aadhaar"
+            required
+            pattern="\d{12}"
+            maxlength="12"
+            class="w-full px-4 py-2 pl-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter 12-digit Aadhaar"
+            title="Aadhaar number must be 12 digits"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="password" class="block mb-1 text-sm font-medium text-gray-700">Password</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M12 11c0 1.657-1.343 3-3 3S6 12.657 6 11s1.343-3 3-3 3 1.343 3 3z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M20.59 13.41A9 9 0 003 11a9 9 0 0017.59 2.41z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            class="w-full px-4 py-2 pl-10 pr-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="••••••••"
+          />
+          <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePassword()">
+            <svg id="eyeIcon" class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.732 2.057-2.091 3.84-3.902 5.043" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="w-full px-4 py-2 font-semibold text-white transition-all bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl hover:scale-105 hover:shadow-md"
+      >
+        Sign In
+      </button>
+    </form>
+
+    
+
+  <script>
+    function togglePassword() {
+      const input = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
+
+      eyeIcon.innerHTML = isHidden
+        ? `<path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.27-2.944-9.544-7a9.966 9.966 0 012.064-3.327M9.88 9.88a3 3 0 104.24 4.24M3 3l18 18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+        : `<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+           <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.732 2.057-2.091 3.84-3.902 5.043" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+    }
+  </script>
+</body>
+</html>

@@ -11,7 +11,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "PARKEYE.settings")  # replace with your project name
 django.setup()
 
-from PARK_EYE.models import VehicleRecord
+from PARK_EYE.models import VehicleRecord,Suspected
 from django.utils import timezone
 
 # Path to tesseract executable
@@ -20,21 +20,29 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 # Function defining :-
 def database(text):
     if text:
+        suspected = Suspected.objects.filter(regs_no=text).exists()
+        if suspected:
+            print(f"🚨 ALERT: Suspected vehicle detected: {text}")
+        else:
+            print("NOT Found")    
+
+
         existing_record = VehicleRecord.objects.filter(regs_no=text, in_parking=True).first()
-    if existing_record:
+        if existing_record:
         # Vehicle is already in parking — mark exit
-        existing_record.out_date_time = timezone.now()
-        existing_record.in_parking = False
-        existing_record.save()
-        print(f"🚗 Exit recorded for: {text} at {existing_record.out_date_time.strftime('%Y-%m-%d %H:%M:%S')}")
-    else:
+            existing_record.out_date_time = timezone.now()
+            existing_record.in_parking = False
+            
+            existing_record.save()
+            print(f"🚗 Exit recorded for: {text} at {existing_record.out_date_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        else:
         # New vehicle entry
-        VehicleRecord.objects.create(
-            regs_no=text,
-            in_parking=True,
-            in_date_time=timezone.now()
-        )
-        print(f"✅ Entry recorded for: {text} at {timezone.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            VehicleRecord.objects.create(
+                regs_no=text,
+                in_parking=True,
+                in_date_time=timezone.now()
+            )
+            print(f"✅ Entry recorded for: {text} at {timezone.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
 
 # variable which takes cars image input name

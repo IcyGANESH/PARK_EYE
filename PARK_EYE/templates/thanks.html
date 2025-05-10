@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complaint Submitted</title>
+    <link rel="icon" href="./assets/parking.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  </head>
+  <body class="bg-gradient-to-r from-blue-50 via-purple-100 to-pink-100 flex items-center justify-center min-h-screen px-4 text-center">
+    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-sm flex flex-col items-center">
+      <lottie-player
+        src="https://assets10.lottiefiles.com/packages/lf20_jbrw3hcz.json"
+        background="transparent"
+        speed="1"
+        style="width: 200px; height: 100px"
+        autoplay
+      ></lottie-player>
+
+      <h1 class="text-2xl sm:text-3xl font-bold text-green-600 mt-4">
+        Complaint Submitted!
+      </h1>
+      <p class="text-gray-700 mt-2 mb-6 text-sm sm:text-base">
+        Thank you for helping us improve parking safety.
+      </p>
+      <a
+        href="{% url 'complain' %}"
+        class="text-white bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-lg text-sm sm:text-base transition"
+      >
+        Submit another complaint
+      </a>
+    </div>
+  </body>
+</html>
+

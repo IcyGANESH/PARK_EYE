@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="./assets/parking.png">
+  <title>Verify OTP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-tr from-purple-100 to-blue-100">
+  <div class="w-full max-w-sm p-8 space-y-6 bg-white rounded-2xl shadow-xl">
+    <h2 class="text-2xl font-bold text-center text-gray-800">Enter OTP</h2>
+    <p class="text-sm text-center text-gray-500">A 4-digit code has been sent to your registered device.</p>
+
+    <form class="space-y-4" action="/submit-otp" method="POST">
+      <div class="flex justify-between space-x-2">
+        <input type="text" name="otp1" maxlength="1" required class="w-1/4 text-center px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl" />
+        <input type="text" name="otp2" maxlength="1" required class="w-1/4 text-center px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl" />
+        <input type="text" name="otp3" maxlength="1" required class="w-1/4 text-center px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl" />
+        <input type="text" name="otp4" maxlength="1" required class="w-1/4 text-center px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl" />
+      </div>
+
+      <button type="submit" class="w-full px-4 py-2 mt-4 font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700">Verify</button>
+    </form>
+
+    <p class="text-sm text-center text-gray-600">Didn’t receive OTP? <a href="/resend-otp" class="text-blue-600 hover:underline">Resend</a></p>
+  </div>
+
+  <script>
+    const inputs = document.querySelectorAll('input[type="text"]');
+  
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        if (input.value.length === 1 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+  
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && input.value === '' && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+    });
+  </script>
+  
+</body>
+</html>

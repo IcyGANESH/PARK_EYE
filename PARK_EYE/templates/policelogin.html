@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Police Login</title>
+</head>
+<body>
+    <h2>Police Control Room Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+    {% for message in messages %}
+        <p style="color:red;">{{ message }}</p>
+    {% endfor %}
+</body>
+</html>
