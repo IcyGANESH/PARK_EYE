@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from .models import Suspected,Police,VehicleRecord
-from .forms import PoliceLoginForm
 from django.contrib import messages
 from django.utils.timezone import now
 # Create your views here.

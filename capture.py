@@ -155,6 +155,7 @@ if NumberPlateCnt is not None:
     database(text)
 
 
+
 else:
     print("Number plate contour not detected.")
 

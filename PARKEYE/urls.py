@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home, name='home'),
     path('PARK_EYE/', include('PARK_EYE.urls')),
+    path('api/', include('api.urls')),
 
 
 ]
