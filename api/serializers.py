@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Suspected, VehicleRecord, Location, Police
+from PARK_EYE.models import Suspected, VehicleRecord, Location, Police
 
 
 class SuspectedSerializer(serializers.ModelSerializer):

@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from django.utils.timezone import now
 from django.shortcuts import get_object_or_404
 
-from .models import Suspected, Police, VehicleRecord, Location
+from PARK_EYE.models import Suspected, Police, VehicleRecord, Location
 from .serializers import (
     SuspectedSerializer,
     PoliceSerializer,

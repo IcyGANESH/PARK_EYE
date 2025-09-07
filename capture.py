@@ -41,7 +41,7 @@ def database(text):
     suspected = Suspected.objects.filter(regs_no=text).exists()
     if suspected:
         print(f"🚨 ALERT: Suspected vehicle detected: {text}\n")
-        Suspected.objects.filter(found_location__isnull=True).update(found_location="Galgotias College Parking")
+        Suspected.objects.filter(found_location__isnull=True).update(found_location="KIET Group Of Institutions, Muradnager, Ghaziabad")
 
     # Step 2: Check if vehicle is already inside
     existing_record = VehicleRecord.objects.filter(regs_no=text, in_parking=True).first()

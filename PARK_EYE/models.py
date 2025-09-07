@@ -35,14 +35,15 @@ class Location(models.Model):
 class Police(models.Model):
     username = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=255)  # hashed password
-    locations = models.ManyToManyField(Location)  # can select multiple locations
+    locations = models.ManyToManyField(Location, related_name="police_officers")
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
-        self.save()
+        self.save(update_fields=["password"])
 
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
     def __str__(self):
-        return f"{self.username} ({self.locations})"        
+        locations = ", ".join([loc.name for loc in self.locations.all()])
+        return f"{self.username}---------------------({locations})"      
